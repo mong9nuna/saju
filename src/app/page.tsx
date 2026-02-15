@@ -6,6 +6,7 @@ import SajuForm from '@/components/saju/SajuForm'
 import SajuResultComponent from '@/components/saju/SajuResult'
 import GunghapForm from '@/components/gunghap/GunghapForm'
 import GunghapResultComponent from '@/components/gunghap/GunghapResult'
+import TarotSpread from '@/components/tarot/TarotSpread'
 import { calculatePillars } from '@/lib/saju/pillars'
 import { analyzeOhaeng } from '@/lib/saju/ohaeng'
 import { determineConstitution } from '@/lib/saju/constitution'
@@ -24,7 +25,7 @@ function buildSajuResult(input: DateInput): SajuResult {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'saju' | 'gunghap'>('saju')
+  const [activeTab, setActiveTab] = useState<'saju' | 'gunghap' | 'tarot'>('saju')
   const [sajuResult, setSajuResult] = useState<SajuResult | null>(null)
   const [interpretation, setInterpretation] = useState<InterpretationResult | null>(null)
   const [gunghapResult, setGunghapResult] = useState<(GunghapResult & { person1: SajuResult; person2: SajuResult }) | null>(null)
@@ -45,19 +46,21 @@ export default function Home() {
   return (
     <main>
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === 'saju' ? (
+      {activeTab === 'saju' && (
         <>
           <SajuForm onSubmit={handleSajuSubmit} />
           {sajuResult && interpretation && (
             <SajuResultComponent saju={sajuResult} interpretation={interpretation} />
           )}
         </>
-      ) : (
+      )}
+      {activeTab === 'gunghap' && (
         <>
           <GunghapForm onSubmit={handleGunghapSubmit} />
           {gunghapResult && <GunghapResultComponent result={gunghapResult} />}
         </>
       )}
+      {activeTab === 'tarot' && <TarotSpread />}
     </main>
   )
 }
